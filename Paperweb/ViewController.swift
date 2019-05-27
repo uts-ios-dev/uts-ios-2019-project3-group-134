@@ -12,6 +12,10 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var desk: UIScrollView!
     var paperwebs:[Paperweb] = []
+    var paperwebsSearch:[Paperweb] = []
+    var paperwebsButtons:[UIButton] = []  //
+    var paperwebsTitles:[UILabel] = []    //
+    var searchDid: Bool = false
     
     
     override func viewDidLoad() {
@@ -85,10 +89,12 @@ class ViewController: UIViewController {
             btn.addTarget(self, action: #selector(tapped), for: .touchUpInside)
             btn.tag = paperwebs[i].id
             self.desk.addSubview(btn)
+            paperwebsButtons.append(btn)  //
             
             let title = UILabel(frame: CGRect(x: horizontalNum * 110, y: paperwebsY + 70, width: 100, height: 120))
             title.text = paperwebs[i].title
             self.desk.addSubview(title)
+            paperwebsTitles.append(title)    //
             
             horizontalNum += 1
             if horizontalNum == 3 {
@@ -111,6 +117,157 @@ class ViewController: UIViewController {
             paperwebs.append(Paperweb(title: "paperweb"+String(i), content: "abcdefg", index: 0, id:i))
         }
         Database().setPaperwebs(paperwebs: paperwebs)
+    }
+    
+    func deletePaperwebs(paperwebs:[Paperweb]) { //每次点击edit增加删除按钮
+        
+        var paperwebsY = 0
+        var horizontalNum  = 0
+        
+        if searchDid == false {
+            for i in 0..<paperwebs.count {
+                
+                let delete = UIButton(frame: CGRect(x: horizontalNum * 110, y: paperwebsY, width: 20, height: 20))
+                delete.setImage(UIImage(named: "deleteButton"), for: UIControl.State.normal)
+                delete.tag = paperwebs[i].id
+                delete.addTarget(self, action: #selector(tapped2), for: .touchUpInside)
+                self.desk.addSubview(delete)
+                paperwebsButtons.append(delete)
+                
+                horizontalNum += 1
+                if horizontalNum == 3 {
+                    horizontalNum = 0
+                    paperwebsY += 150
+                    desk.contentSize = CGSize(width: 374,height: desk.contentSize.height + 150);
+                }
+            }
+        }else{
+            for i in 0..<paperwebsSearch.count{
+                
+                let delete = UIButton(frame: CGRect(x: horizontalNum * 110, y: paperwebsY, width: 20, height: 20))
+                delete.setImage(UIImage(named: "deleteButton"), for: UIControl.State.normal)
+                delete.tag = paperwebsSearch[i].id
+                delete.addTarget(self, action: #selector(tapped2), for: .touchUpInside)
+                self.desk.addSubview(delete)
+                paperwebsButtons.append(delete)
+                
+                horizontalNum += 1
+                if horizontalNum == 3 {
+                    horizontalNum = 0
+                    paperwebsY += 150
+                    desk.contentSize = CGSize(width: 374,height: desk.contentSize.height + 150);
+                }
+                
+            }
+        }
+    }
+    
+    
+    func titleEditPaperwebs(paperwebs:[Paperweb]) { //每次点击title会跳转界面来编辑名字
+        
+        var paperwebsY = 0
+        var horizontalNum  = 0
+        
+        for i in 0..<paperwebs.count {
+            let title = UIButton(frame: CGRect(x: horizontalNum * 110, y: paperwebsY + 120, width: 100, height: 20))
+            title.addTarget(self, action: #selector(tapped3), for: .touchUpInside)
+            title.tag = paperwebs[i].id
+            self.desk.addSubview(title)
+            paperwebsButtons.append(title)
+            
+            horizontalNum += 1
+            if horizontalNum == 3 {
+                horizontalNum = 0
+                paperwebsY += 150
+                desk.contentSize = CGSize(width: 374,height: desk.contentSize.height + 150);
+            }
+        }
+    }
+    
+    
+    func removeAll() {
+        
+        for each in paperwebsButtons{
+            each.removeFromSuperview();
+        }
+        paperwebsButtons = []
+        
+        for each in paperwebsTitles{
+            each.removeFromSuperview();
+        }
+        paperwebsTitles = []
+        
+    }
+    
+    
+    @IBAction func edit(_ sender: Any) {
+        deletePaperwebs(paperwebs: paperwebs)
+        titleEditPaperwebs(paperwebs: paperwebs)
+    }
+    
+    
+    @objc func tapped2(sender: UIButton) {
+        
+        let deleteID = sender.tag
+        
+       // print(deleteID-1)
+        
+        Database().deletePaperweb(id: deleteID)
+        paperwebs = Database().getPaperwebs()
+        
+        removeAll()
+        setPaperwebs(paperwebs: paperwebs)
+        
+    }
+    
+    @objc func tapped3(sender: UIButton) {
+        changeTitle(id:sender.tag)
+    }
+    
+
+    @IBOutlet weak var searchBar: UISearchBar!
+    
+    
+    @IBAction func search(_ sender: Any) {
+        paperwebsSearch = []
+        searchDid = true
+        for i in 0..<paperwebs.count {
+            
+            if (paperwebs[i].title == searchBar.text) {
+                
+                paperwebsSearch.append(paperwebs[i])
+                
+            }
+            removeAll()
+            setPaperwebs(paperwebs: paperwebsSearch)
+        }
+    }
+    
+    //弹出带有输入框的提示框
+    @IBAction func changeTitle(id:Int) {
+        //初始化UITextField
+        var inputText:UITextField = UITextField();
+        let msgAlertCtr = UIAlertController.init(title: "Modify title", message: "Please input your file title", preferredStyle: .alert)
+        let ok = UIAlertAction.init(title: "confirm", style:.default) { (action:UIAlertAction) ->() in
+            self.paperwebs[id-1].title = inputText.text!
+            Database().setPaperwebs(paperwebs: self.paperwebs)
+            self.removeAll()
+            self.setPaperwebs(paperwebs: self.paperwebs)
+        }
+        
+        let cancel = UIAlertAction.init(title: "cancel", style:.cancel) { (action:UIAlertAction) -> ()in
+            print("cancel")
+        }
+        
+        msgAlertCtr.addAction(ok)
+        msgAlertCtr.addAction(cancel)
+        //添加textField输入框
+        msgAlertCtr.addTextField { (textField) in
+            //设置传入的textField为初始化UITextField
+            inputText = textField
+        }
+        //设置到当前视图
+        self.present(msgAlertCtr, animated: true, completion: nil)
     }
     
 }

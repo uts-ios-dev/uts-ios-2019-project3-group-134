@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,11 +24,21 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oog-K9-FqQ">
                                 <rect key="frame" x="364" y="140" width="30" height="30"/>
                                 <state key="normal" title="Edit"/>
+                                <connections>
+                                    <action selector="edit:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4ve-d9-PjC"/>
+                                </connections>
                             </button>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="VYu-ph-sGR">
                                 <rect key="frame" x="20" y="64" width="374" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ssp-05-Goz">
+                                <rect key="frame" x="316" y="77" width="48" height="30"/>
+                                <state key="normal" title="Search"/>
+                                <connections>
+                                    <action selector="search:" destination="BYZ-38-t0r" eventType="touchUpInside" id="M0p-1S-Lmm"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -39,16 +49,20 @@
                             <constraint firstItem="VYu-ph-sGR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="dn3-NY-FQL"/>
                             <constraint firstItem="oog-K9-FqQ" firstAttribute="top" secondItem="VYu-ph-sGR" secondAttribute="bottom" constant="20" id="g1h-GU-sGR"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="VYu-ph-sGR" secondAttribute="trailing" constant="20" id="ge8-lT-z84"/>
+                            <constraint firstItem="Ssp-05-Goz" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="33" id="hgW-AL-Ajw"/>
                             <constraint firstItem="F1p-cJ-j9L" firstAttribute="top" secondItem="oog-K9-FqQ" secondAttribute="bottom" constant="20" id="kXL-g5-07K"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="oog-K9-FqQ" secondAttribute="trailing" constant="20" id="nOh-De-FR3"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="F1p-cJ-j9L" secondAttribute="trailing" constant="20" id="oQ0-V8-mG1"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Ssp-05-Goz" secondAttribute="trailing" constant="50" id="v7r-PO-H3a"/>
                             <constraint firstItem="F1p-cJ-j9L" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="yFj-Oe-DnI"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="mXW-Te-om1"/>
                     <connections>
+                        <outlet property="SearchBar" destination="VYu-ph-sGR" id="8D3-KN-0dw"/>
                         <outlet property="desk" destination="F1p-cJ-j9L" id="sGV-BD-BbC"/>
+                        <outlet property="searchBar" destination="VYu-ph-sGR" id="Ewm-eR-33T"/>
                         <outlet property="searchDisplayController" destination="qes-rE-deV" id="rSm-kv-0lx"/>
                         <segue destination="c3E-zp-xKe" kind="show" identifier="ShowDetailView" id="bZ2-yY-0w4"/>
                     </connections>
