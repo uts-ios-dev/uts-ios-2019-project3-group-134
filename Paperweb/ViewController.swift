@@ -24,7 +24,7 @@ class ViewController: UIViewController {
         //obtain share extension content
         //let userDefault = UserDefaults.standard
         //userDefault.addSuite(named: "group.Paperweb")
-        let userDefault = UserDefaults(suiteName: "group.Paperweb")
+        let userDefault = UserDefaults(suiteName: "group.UTS.Paperweb")
         print("before")
         var i = 0
         var key = "paperweb"+String(i)
@@ -270,5 +270,11 @@ class ViewController: UIViewController {
         self.present(msgAlertCtr, animated: true, completion: nil)
     }
     
+    @IBAction func refresh(_ sender: Any) {
+        viewDidLoad()
+        paperwebs = Database().getPaperwebs()
+        removeAll()
+        setPaperwebs(paperwebs: paperwebs)
+    }
 }
 
