@@ -14,3 +14,7 @@ class userDefaultKeys {
     let indexList = "indexList"
     let paperwebs = "paperwebs"
 }
+
+class identifier {
+    let showDetailView = "ShowDetailView"
+}

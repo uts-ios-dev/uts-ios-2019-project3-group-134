@@ -11,35 +11,57 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var desk: UIScrollView!
+    @IBOutlet weak var searchBar: UISearchBar!
     var paperwebs:[Paperweb] = []
     var paperwebsSearch:[Paperweb] = []
-    var paperwebsButtons:[UIButton] = []  //
-    var paperwebsTitles:[UILabel] = []    //
+    var paperwebsButtons:[UIButton] = []
+    var paperwebsTitles:[UILabel] = []
     var searchDid: Bool = false
     
+    var searchText:[String] = []
+    var filterText:[String] = []
     
+    struct display {
+        var paperwebsWidth = 100
+        var paperwebsHight = 120
+        var horizontalSpace = 110
+        var titleSpace = 70
+        var verticalSpace = 150
+        var maxHorizontalNum = 3
+        
+        var deleteButtonWidth = 20
+        var deleteButtonHight = 20
+        
+        var editButtonSpace = 120
+        var editButtonWidth = 100
+        var editButtonHight = 20
+        
+        var deskWidth = 374
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //obtain share extension content
-        //let userDefault = UserDefaults.standard
-        //userDefault.addSuite(named: "group.Paperweb")
+        loadNewPapaerweb()
+        desk.isScrollEnabled = true
+        desk.contentSize = CGSize(width: display().deskWidth,height: display().verticalSpace);
+        
+        paperwebs = Database().getPaperwebs()
+        setPaperwebButtons(paperwebs: paperwebs)
+    }
+    
+    func loadNewPapaerweb() {//Put all the newly acquired Paperwebs into the database
         let userDefault = UserDefaults(suiteName: "group.UTS.Paperweb")
-        print("before")
         var i = 0
         var key = "paperweb"+String(i)
         while(true){
             key = "paperweb"+String(i)
             if((userDefault?.object(forKey: key)) != nil){
                 if let dict = userDefault!.value(forKey: key) as? NSDictionary{
-                    print("jinle")
                     let title = dict.value(forKey: "title") as! String
                     let content = dict.value(forKey: "content") as! String
-                    
                     userDefault!.removeObject(forKey: key)
-                    print("Removed key: ",key)
                     userDefault!.synchronize()
-                    print(title,content)
                     addPaperweb(title: title, content: content, index: 0, id: Database().getPaperwebsNum()+1)
                 }
                 i = i + 1
@@ -47,145 +69,93 @@ class ViewController: UIViewController {
                 break
             }
         }
-        
-        
-        print("after")
-        
-        // Do any additional setup after loading the view.
-        desk.isScrollEnabled = true
-        desk.contentSize = CGSize(width: 374,height: 150);
-        
-        //testAddPaperwebs(number:24)
-        
-        
-
-        //Database().deletePaperweb(id:13)
-        //删除指定id的纸网页，id从1开始计算，不能超出当前纸网页的数量，否则报错
-        
-        paperwebs = Database().getPaperwebs()
-        setPaperwebs(paperwebs: paperwebs)
     }
 
-    @objc func tapped(sender: UIButton) {//每一个纸网页被点击后触发，获取到它们的id,然后跳转到内容页面
-        self.performSegue(withIdentifier: "ShowDetailView", sender: sender)
+    @objc func toContentView(sender: UIButton) {//Each paper page is triggered after being clicked, gets their id, and then jumps to the content page.
+        self.performSegue(withIdentifier: identifier().showDetailView, sender: sender)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {//在这个方法中给新页面传递参数,此处传递到的是纸网页id
-        if segue.identifier == "ShowDetailView"{
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {//Pass the parameters to the new page in this method, here is the paper page id
+        if segue.identifier == identifier().showDetailView {
             let controller = segue.destination as! ContentViewController
             controller.paperwebId = (sender as! UIButton).tag
         }
     }
     
-    func setPaperwebs(paperwebs:[Paperweb]) {//将所有纸网页放置入当前view,页面刷新时会被调用
+    func setPaperwebButtons(paperwebs:[Paperweb]) {//Place all paper pages into the current view and be called when the page is refreshed
         
         var paperwebsY = 0
         var horizontalNum  = 0
         
         for i in 0..<paperwebs.count {
             
-            let btn = UIButton(frame: CGRect(x: horizontalNum * 110, y: paperwebsY, width: 100, height: 120))
+            let btn = UIButton(frame: CGRect(x: horizontalNum * display().horizontalSpace, y: paperwebsY, width: display().paperwebsWidth, height: display().paperwebsHight))
             btn.setImage(UIImage(named: "paperweb"), for: UIControl.State.normal)
-            btn.addTarget(self, action: #selector(tapped), for: .touchUpInside)
+            btn.addTarget(self, action: #selector(toContentView), for: .touchUpInside)
             btn.tag = paperwebs[i].id
             self.desk.addSubview(btn)
-            paperwebsButtons.append(btn)  //
+            paperwebsButtons.append(btn)
             
-            let title = UILabel(frame: CGRect(x: horizontalNum * 110, y: paperwebsY + 70, width: 100, height: 120))
+            let title = UILabel(frame: CGRect(x: horizontalNum * display().horizontalSpace, y: paperwebsY + display().titleSpace, width: display().paperwebsWidth, height: display().paperwebsHight))
             title.text = paperwebs[i].title
             self.desk.addSubview(title)
-            paperwebsTitles.append(title)    //
+            paperwebsTitles.append(title)
             
             horizontalNum += 1
-            if horizontalNum == 3 {
+            if horizontalNum == display().maxHorizontalNum {
                 horizontalNum = 0
-                paperwebsY += 150
-                desk.contentSize = CGSize(width: 374,height: desk.contentSize.height + 150);
+                paperwebsY += display().verticalSpace
+                desk.contentSize = CGSize(width: CGFloat(display().deskWidth),height: desk.contentSize.height + CGFloat(display().verticalSpace));
             }
         }
     }
     
-    func addPaperweb(title:String,content:String,index:Int,id:Int) { //将一张新的纸网页放入数据库，应该从外部被调用
-        paperwebs = Database().getPaperwebs()
-        paperwebs.append(Paperweb(title: title, content: content, index: index, id: id))
-        print("第"+String(paperwebs.count)+"张纸网页被置入,它的id是"+String(id))
-        Database().setPaperwebs(paperwebs: paperwebs)
-    }
-    
-    func testAddPaperwebs(number:Int) {//测试用方法，可删除
-        for i in 1..<number+1 {
-            paperwebs.append(Paperweb(title: "paperweb"+String(i), content: "abcdefg", index: 0, id:i))
-        }
-        Database().setPaperwebs(paperwebs: paperwebs)
-    }
-    
-    func deletePaperwebs(paperwebs:[Paperweb]) { //每次点击edit增加删除按钮
-        
-        var paperwebsY = 0
-        var horizontalNum  = 0
-        
-        if searchDid == false {
-            for i in 0..<paperwebs.count {
-                
-                let delete = UIButton(frame: CGRect(x: horizontalNum * 110, y: paperwebsY, width: 20, height: 20))
-                delete.setImage(UIImage(named: "deleteButton"), for: UIControl.State.normal)
-                delete.tag = paperwebs[i].id
-                delete.addTarget(self, action: #selector(tapped2), for: .touchUpInside)
-                self.desk.addSubview(delete)
-                paperwebsButtons.append(delete)
-                
-                horizontalNum += 1
-                if horizontalNum == 3 {
-                    horizontalNum = 0
-                    paperwebsY += 150
-                    desk.contentSize = CGSize(width: 374,height: desk.contentSize.height + 150);
-                }
-            }
-        }else{
-            for i in 0..<paperwebsSearch.count{
-                
-                let delete = UIButton(frame: CGRect(x: horizontalNum * 110, y: paperwebsY, width: 20, height: 20))
-                delete.setImage(UIImage(named: "deleteButton"), for: UIControl.State.normal)
-                delete.tag = paperwebsSearch[i].id
-                delete.addTarget(self, action: #selector(tapped2), for: .touchUpInside)
-                self.desk.addSubview(delete)
-                paperwebsButtons.append(delete)
-                
-                horizontalNum += 1
-                if horizontalNum == 3 {
-                    horizontalNum = 0
-                    paperwebsY += 150
-                    desk.contentSize = CGSize(width: 374,height: desk.contentSize.height + 150);
-                }
-                
-            }
-        }
-    }
-    
-    
-    func titleEditPaperwebs(paperwebs:[Paperweb]) { //每次点击title会跳转界面来编辑名字
+    func setDeleteButtons(paperwebs:[Paperweb]) { //Add delete buttons to each paperweb buttons
         
         var paperwebsY = 0
         var horizontalNum  = 0
         
         for i in 0..<paperwebs.count {
-            let title = UIButton(frame: CGRect(x: horizontalNum * 110, y: paperwebsY + 120, width: 100, height: 20))
-            title.addTarget(self, action: #selector(tapped3), for: .touchUpInside)
+                
+            let delete = UIButton(frame: CGRect(x: horizontalNum * display().horizontalSpace, y: paperwebsY, width: display().deleteButtonWidth, height: display().deleteButtonHight))
+            delete.setImage(UIImage(named: "deleteButton"), for: UIControl.State.normal)
+            delete.tag = paperwebs[i].id
+            delete.addTarget(self, action: #selector(deletePaperweb), for: .touchUpInside)
+            self.desk.addSubview(delete)
+            paperwebsButtons.append(delete)
+                
+            horizontalNum += 1
+            if horizontalNum == display().maxHorizontalNum {
+                horizontalNum = 0
+                paperwebsY += display().verticalSpace
+                desk.contentSize = CGSize(width: CGFloat(display().deskWidth),height: desk.contentSize.height + CGFloat(display().verticalSpace));
+            }
+        }
+    }
+    
+    func setEditButtons(paperwebs:[Paperweb]) { //Add edit buttons to each paperweb buttons
+        
+        var paperwebsY = 0
+        var horizontalNum  = 0
+        
+        for i in 0..<paperwebs.count {
+            let title = UIButton(frame: CGRect(x: horizontalNum * display().horizontalSpace, y: paperwebsY + display().editButtonSpace, width: display().deleteButtonWidth, height: display().deleteButtonHight))
+            title.addTarget(self, action: #selector(changeTitle), for: .touchUpInside)
             title.tag = paperwebs[i].id
             self.desk.addSubview(title)
             paperwebsButtons.append(title)
             
             horizontalNum += 1
-            if horizontalNum == 3 {
+            if horizontalNum == display().maxHorizontalNum {
                 horizontalNum = 0
-                paperwebsY += 150
-                desk.contentSize = CGSize(width: 374,height: desk.contentSize.height + 150);
+                paperwebsY += display().verticalSpace
+                desk.contentSize = CGSize(width: CGFloat(display().deskWidth),height: desk.contentSize.height + CGFloat(display().verticalSpace));
             }
         }
     }
     
     
-    func removeAll() {
+    func removeAll() { //remove all papaerwebs and buttons from the screen
         
         for each in paperwebsButtons{
             each.removeFromSuperview();
@@ -199,60 +169,33 @@ class ViewController: UIViewController {
         
     }
     
-    
-    @IBAction func edit(_ sender: Any) {
-        deletePaperwebs(paperwebs: paperwebs)
-        titleEditPaperwebs(paperwebs: paperwebs)
+    @IBAction func editMode(_ sender: Any) { //show delete buttons and edit buttons to all current papaerwebs
+        if(searchDid==true) {
+            setDeleteButtons(paperwebs: paperwebsSearch)
+            setEditButtons(paperwebs: paperwebsSearch)
+        } else {
+            setDeleteButtons(paperwebs: paperwebs)
+            setEditButtons(paperwebs: paperwebs)
+        }
+        
     }
     
-    
-    @objc func tapped2(sender: UIButton) {
-        
+    @objc func deletePaperweb(sender: UIButton) { //delete a Paperweb from database and reset the screen
         let deleteID = sender.tag
-        
-       // print(deleteID-1)
-        
         Database().deletePaperweb(id: deleteID)
         paperwebs = Database().getPaperwebs()
-        
         removeAll()
-        setPaperwebs(paperwebs: paperwebs)
-        
+        setPaperwebButtons(paperwebs: paperwebs)
     }
     
-    @objc func tapped3(sender: UIButton) {
-        changeTitle(id:sender.tag)
-    }
-    
-
-    @IBOutlet weak var searchBar: UISearchBar!
-    
-    
-    @IBAction func search(_ sender: Any) {
-        paperwebsSearch = []
-        searchDid = true
-        for i in 0..<paperwebs.count {
-            
-            if (paperwebs[i].title == searchBar.text) {
-                
-                paperwebsSearch.append(paperwebs[i])
-                
-            }
-            removeAll()
-            setPaperwebs(paperwebs: paperwebsSearch)
-        }
-    }
-    
-    //弹出带有输入框的提示框
-    @IBAction func changeTitle(id:Int) {
-        //初始化UITextField
+    @objc func changeTitle(sender: UIButton) { //Pop up a prompt box with an input box
         var inputText:UITextField = UITextField();
         let msgAlertCtr = UIAlertController.init(title: "Modify title", message: "Please input your file title", preferredStyle: .alert)
         let ok = UIAlertAction.init(title: "confirm", style:.default) { (action:UIAlertAction) ->() in
-            self.paperwebs[id-1].title = inputText.text!
+            self.paperwebs[sender.tag-1].title = inputText.text!
             Database().setPaperwebs(paperwebs: self.paperwebs)
             self.removeAll()
-            self.setPaperwebs(paperwebs: self.paperwebs)
+            self.setPaperwebButtons(paperwebs: self.paperwebs)
         }
         
         let cancel = UIAlertAction.init(title: "cancel", style:.cancel) { (action:UIAlertAction) -> ()in
@@ -261,20 +204,55 @@ class ViewController: UIViewController {
         
         msgAlertCtr.addAction(ok)
         msgAlertCtr.addAction(cancel)
-        //添加textField输入框
+        
         msgAlertCtr.addTextField { (textField) in
-            //设置传入的textField为初始化UITextField
             inputText = textField
         }
-        //设置到当前视图
+        //Set to current view
         self.present(msgAlertCtr, animated: true, completion: nil)
+    }
+    
+    func addPaperweb(title:String,content:String,index:Int,id:Int) { //Put a new paper page into the database
+        paperwebs = Database().getPaperwebs()
+        paperwebs.append(Paperweb(title: title, content: content, index: index, id: id))
+        Database().setPaperwebs(paperwebs: paperwebs)
+    }
+    
+    @IBAction func search(_ sender: Any) {
+        paperwebsSearch = []
+        searchText = []
+        
+        searchDid = true
+        
+        for i in 0..<paperwebs.count {
+            searchText.append(paperwebs[i].title)
+            
+            filterText = searchText.filter({$0.lowercased().contains(searchBar.text!.lowercased())})
+            
+            
+            if(searchBar.text == ""){
+                
+                paperwebsSearch.append(paperwebs[i])
+                
+            } else {
+                for j in 0..<filterText.count{
+                    if (paperwebs[i].title == filterText[j]){
+                        paperwebsSearch.append(paperwebs[i])
+                    }
+                }
+                removeAll()
+                setPaperwebButtons(paperwebs: paperwebsSearch)
+            }
+        }
     }
     
     @IBAction func refresh(_ sender: Any) {
         viewDidLoad()
         paperwebs = Database().getPaperwebs()
         removeAll()
-        setPaperwebs(paperwebs: paperwebs)
+        searchDid = false
+        setPaperwebButtons(paperwebs: paperwebs)
     }
+    
 }
 

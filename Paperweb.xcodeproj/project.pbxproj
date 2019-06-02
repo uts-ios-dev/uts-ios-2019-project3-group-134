@@ -22,6 +22,7 @@
 		E35C81B3228FDAFC008A5A6B /* Paperweb.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E35C81B1228FDAFC008A5A6B /* Paperweb.xcdatamodeld */; };
 		E35C81B5228FDAFE008A5A6B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E35C81B4228FDAFE008A5A6B /* Assets.xcassets */; };
 		E35C81B8228FDAFE008A5A6B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E35C81B6228FDAFE008A5A6B /* LaunchScreen.storyboard */; };
+		E3E5C02122A3913E00B30976 /* PaperwebButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E5C02022A3913E00B30976 /* PaperwebButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		E35C81B4228FDAFE008A5A6B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E35C81B7228FDAFE008A5A6B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E35C81B9228FDAFE008A5A6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E3E5C02022A3913E00B30976 /* PaperwebButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaperwebButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +137,7 @@
 				E35C81B6228FDAFE008A5A6B /* LaunchScreen.storyboard */,
 				E35C81B9228FDAFE008A5A6B /* Info.plist */,
 				E35C81B1228FDAFC008A5A6B /* Paperweb.xcdatamodeld */,
+				E3E5C02022A3913E00B30976 /* PaperwebButton.swift */,
 			);
 			path = Paperweb;
 			sourceTree = "<group>";
@@ -262,6 +265,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D79B4DB2296746800DD2A3F /* Database.swift in Sources */,
+				E3E5C02122A3913E00B30976 /* PaperwebButton.swift in Sources */,
 				1D79B4DA2296746800DD2A3F /* ContentViewController.swift in Sources */,
 				E35C81AD228FDAFC008A5A6B /* ViewController.swift in Sources */,
 				1D79B4D92296746800DD2A3F /* Keys.swift in Sources */,

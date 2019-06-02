@@ -25,7 +25,7 @@
                                 <rect key="frame" x="364" y="140" width="30" height="30"/>
                                 <state key="normal" title="Edit"/>
                                 <connections>
-                                    <action selector="edit:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4ve-d9-PjC"/>
+                                    <action selector="editMode:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nY5-cN-iVV"/>
                                 </connections>
                             </button>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="VYu-ph-sGR">

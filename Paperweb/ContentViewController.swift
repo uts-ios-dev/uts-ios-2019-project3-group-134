@@ -31,7 +31,7 @@ class ContentViewController: UIViewController {
         super.viewDidLoad()
         label1.text = String(paperwebId!)
 
-        textContent = Database().getContent(id: paperwebId!)//根据ID从数据库获取该纸网页的内容并置入页面
+        textContent = Database().getContent(id: paperwebId!)
         let key: String = "page+" + String.init(format: "%d", paperwebId!);
         currentPage = (UserDefaults.standard.value(forKey: key) ?? 0) as! Int ;
 
@@ -57,34 +57,10 @@ class ContentViewController: UIViewController {
             bigFont(self)
         }
 
-        // Do any additional setup after loading the view.
-        //settingView.isHidden = true
         self.view.bringSubviewToFront(touchView)
         self.view.bringSubviewToFront(settingView)
         self.view.bringSubviewToFront(backButton)
     }
-
-
-//    @IBAction func lastPage(_ sender: Any) {
-//        if currentPage == 0 {
-//            return;
-//        }
-//        currentPage = currentPage - 1
-//        changeContent()
-//
-//
-//    }
-//
-//    @IBAction func NextPage(_ sender: Any) {
-//        if currentPage == totalPage-1 {
-//            return;
-//        }
-//        currentPage = currentPage + 1
-//        changeContent()
-//
-//    }
-
-
 
     func changeContent() {
 
@@ -98,10 +74,7 @@ class ContentViewController: UIViewController {
             newStr = String(textContent[start..<end])
         }
 
-
         textView.text = newStr;
-
-
 
     }
 
@@ -116,25 +89,6 @@ class ContentViewController: UIViewController {
 
         UserDefaults.standard.synchronize();
     }
-
-
-//    @IBAction func setting(_ sender: Any) {
-//        settingView.isHidden = false
-//        self.view.bringSubviewToFront(touchView)
-//        self.view.bringSubviewToFront(settingView)
-//
-//
-//    }
-
-
-
-//    @IBAction func addLab(_ sender: Any) {
-//        let key:String = "page+" + String.init(format: "%d", paperwebId!);
-//
-//        UserDefaults.standard.set(currentPage, forKey: key);
-//        UserDefaults.standard.synchronize();
-//    }
-
 
     @IBAction func whiteBackground(_ sender: Any) {
         backgroundView.backgroundColor = UIColor.white
@@ -178,7 +132,6 @@ class ContentViewController: UIViewController {
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("jinle")
         let point = touches.first!.location(in: touchView)
         print(point.x, point.y)
         if(settingView.isHidden && point.x > backgroundView.frame.maxX / 3 && point.x < backgroundView.frame.maxX / 3 * 2) {
