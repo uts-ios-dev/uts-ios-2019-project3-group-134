@@ -36,24 +36,23 @@ class ContentViewController: UIViewController {
         currentPage = (UserDefaults.standard.value(forKey: key) ?? 0) as! Int ;
 
         totalPage = textContent.count / length + 1;
-
         changeContent()
 
         bg = (UserDefaults.standard.value(forKey: "backgroundColor") ?? 1) as! Int
-        if(bg == 1) {
+        if bg == 1 {
             whiteBackground(self)
-        }else if(bg==2){
+        } else if bg == 2 {
             blackBackground(self)
-        }else if(bg==3){
+        } else if bg == 3 {
             paperBackground(self)
         }
         
         textSize = (UserDefaults.standard.value(forKey: "textSize") ?? 2) as! Int
-        if(textSize==1){
+        if textSize == 1 {
             littleFont(self)
-        }else if (textSize==2){
+        } else if textSize == 2 {
             mediaFont(self)
-        }else if(textSize==3){
+        } else if textSize == 3 {
             bigFont(self)
         }
 
@@ -63,7 +62,6 @@ class ContentViewController: UIViewController {
     }
 
     func changeContent() {
-
         let start = textContent.index(textContent.startIndex, offsetBy: length * currentPage);
         var newStr = "";
         if textContent.count < length * (currentPage + 1) {
@@ -73,11 +71,8 @@ class ContentViewController: UIViewController {
             let end = textContent.index(textContent.startIndex, offsetBy: length * (currentPage + 1));
             newStr = String(textContent[start..<end])
         }
-
         textView.text = newStr;
-
     }
-
 
     @IBAction func back(_ sender: UIButton) {
         self.performSegue(withIdentifier: "back", sender: backButton)
@@ -134,17 +129,17 @@ class ContentViewController: UIViewController {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let point = touches.first!.location(in: touchView)
         print(point.x, point.y)
-        if(settingView.isHidden && point.x > backgroundView.frame.maxX / 3 && point.x < backgroundView.frame.maxX / 3 * 2) {
+        if settingView.isHidden && point.x > backgroundView.frame.maxX / 3 && point.x < backgroundView.frame.maxX / 3 * 2 {
             settingView.isHidden = false
-        } else if (settingView.isHidden == false && point.y < settingView.frame.minY) {
+        } else if settingView.isHidden == false && point.y < settingView.frame.minY {
             settingView.isHidden = true
-        } else if(settingView.isHidden && point.x < backgroundView.frame.maxX / 3) {
+        } else if settingView.isHidden && point.x < backgroundView.frame.maxX / 3 {
             if currentPage == 0 {
                 return;
             }
             currentPage = currentPage - 1
             changeContent()
-        } else if(settingView.isHidden && point.x > backgroundView.frame.maxX / 3 * 2) {
+        } else if settingView.isHidden && point.x > backgroundView.frame.maxX / 3 * 2 {
             if currentPage == totalPage-1 {
                 return;
             }

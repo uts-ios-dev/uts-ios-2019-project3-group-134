@@ -54,7 +54,7 @@ class ViewController: UIViewController {
         let userDefault = UserDefaults(suiteName: userDefaultSuiteName().projectName)
         var i = 0
         var key:String
-        while(true){
+        while(true) {
             key = "paperweb"+String(i)
             if((userDefault?.object(forKey: key)) != nil){
                 if let dict = userDefault!.value(forKey: key) as? NSDictionary{
@@ -71,7 +71,7 @@ class ViewController: UIViewController {
         }
     }
 
-    @objc func toContentView(sender: UIButton) {//Each paper page is triggered after being clicked, gets their id, and then jumps to the content page.
+    @objc func toContentView(sender: UIButton) {//Each Paperwebs is triggered after being clicked, gets their id, and then jumps to the content page.
         self.performSegue(withIdentifier: identifier().showDetailView, sender: sender)
     }
     
@@ -82,21 +82,21 @@ class ViewController: UIViewController {
         }
     }
     
-    func setPaperwebButtons(paperwebs:[Paperweb]) {//Place all paper pages into the current view and be called when the page is refreshed
+    func setPaperwebButtons(paperwebs:[Paperweb]) {//Place all Paperwebs into the current view and be called when the page is refreshed
         
-        var paperwebsY = 0
+        var positionY = 0
         var horizontalNum  = 0
         
         for i in 0..<paperwebs.count {
             
-            let btn = UIButton(frame: CGRect(x: horizontalNum * display().horizontalSpace, y: paperwebsY, width: display().paperwebsWidth, height: display().paperwebsHight))
+            let btn = UIButton(frame: CGRect(x: horizontalNum * display().horizontalSpace, y: positionY, width: display().paperwebsWidth, height: display().paperwebsHight))
             btn.setImage(UIImage(named: "paperweb"), for: UIControl.State.normal)
             btn.addTarget(self, action: #selector(toContentView), for: .touchUpInside)
             btn.tag = paperwebs[i].id
             self.desk.addSubview(btn)
             paperwebsButtons.append(btn)
             
-            let title = UILabel(frame: CGRect(x: horizontalNum * display().horizontalSpace, y: paperwebsY + display().titleSpace, width: display().paperwebsWidth, height: display().paperwebsHight))
+            let title = UILabel(frame: CGRect(x: horizontalNum * display().horizontalSpace, y: positionY + display().titleSpace, width: display().paperwebsWidth, height: display().paperwebsHight))
             title.text = paperwebs[i].title
             self.desk.addSubview(title)
             paperwebsTitles.append(title)
@@ -104,20 +104,20 @@ class ViewController: UIViewController {
             horizontalNum += 1
             if horizontalNum == display().maxHorizontalNum {
                 horizontalNum = 0
-                paperwebsY += display().verticalSpace
+                positionY += display().verticalSpace
                 desk.contentSize = CGSize(width: CGFloat(display().deskWidth),height: desk.contentSize.height + CGFloat(display().verticalSpace));
             }
         }
     }
     
-    func setDeleteButtons(paperwebs:[Paperweb]) { //Add delete buttons to each paperweb buttons
+    func setDeleteButtons(paperwebs:[Paperweb]) { //Add delete buttons to each Paperweb buttons
         
-        var paperwebsY = 0
+        var positionY = 0
         var horizontalNum  = 0
         
         for i in 0..<paperwebs.count {
                 
-            let delete = UIButton(frame: CGRect(x: horizontalNum * display().horizontalSpace, y: paperwebsY, width: display().deleteButtonWidth, height: display().deleteButtonHight))
+            let delete = UIButton(frame: CGRect(x: horizontalNum * display().horizontalSpace, y: positionY, width: display().deleteButtonWidth, height: display().deleteButtonHight))
             delete.setImage(UIImage(named: "deleteButton"), for: UIControl.State.normal)
             delete.tag = paperwebs[i].id
             delete.addTarget(self, action: #selector(deletePaperweb), for: .touchUpInside)
@@ -127,19 +127,19 @@ class ViewController: UIViewController {
             horizontalNum += 1
             if horizontalNum == display().maxHorizontalNum {
                 horizontalNum = 0
-                paperwebsY += display().verticalSpace
+                positionY += display().verticalSpace
                 desk.contentSize = CGSize(width: CGFloat(display().deskWidth),height: desk.contentSize.height + CGFloat(display().verticalSpace));
             }
         }
     }
     
-    func setEditButtons(paperwebs:[Paperweb]) { //Add edit buttons to each paperweb buttons
+    func setEditButtons(paperwebs:[Paperweb]) { //Add edit buttons to each Paperweb buttons
         
-        var paperwebsY = 0
+        var positionY = 0
         var horizontalNum  = 0
         
         for i in 0..<paperwebs.count {
-            let title = UIButton(frame: CGRect(x: horizontalNum * display().horizontalSpace, y: paperwebsY + display().editButtonSpace, width: display().deleteButtonWidth, height: display().deleteButtonHight))
+            let title = UIButton(frame: CGRect(x: horizontalNum * display().horizontalSpace, y: positionY + display().editButtonSpace, width: display().editButtonWidth, height: display().editButtonHight))
             title.addTarget(self, action: #selector(changeTitle), for: .touchUpInside)
             title.tag = paperwebs[i].id
             self.desk.addSubview(title)
@@ -148,14 +148,14 @@ class ViewController: UIViewController {
             horizontalNum += 1
             if horizontalNum == display().maxHorizontalNum {
                 horizontalNum = 0
-                paperwebsY += display().verticalSpace
+                positionY += display().verticalSpace
                 desk.contentSize = CGSize(width: CGFloat(display().deskWidth),height: desk.contentSize.height + CGFloat(display().verticalSpace));
             }
         }
     }
     
     
-    func removeAll() { //remove all papaerwebs and buttons from the screen
+    func removeAll() { //remove all Papaerwebs,lables and buttons from the screen
         
         for each in paperwebsButtons{
             each.removeFromSuperview();
@@ -170,7 +170,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func editMode(_ sender: Any) { //show delete buttons and edit buttons to all current papaerwebs
-        if(searchDid==true) {
+        if searchDid == true {
             setDeleteButtons(paperwebs: paperwebsSearch)
             setEditButtons(paperwebs: paperwebsSearch)
         } else {
@@ -183,9 +183,7 @@ class ViewController: UIViewController {
     @objc func deletePaperweb(sender: UIButton) { //delete a Paperweb from database and reset the screen
         let deleteID = sender.tag
         Database().deletePaperweb(id: deleteID)
-        paperwebs = Database().getPaperwebs()
-        removeAll()
-        setPaperwebButtons(paperwebs: paperwebs)
+        refresh(sender)
     }
     
     @objc func changeTitle(sender: UIButton) { //Pop up a prompt box with an input box
@@ -194,8 +192,7 @@ class ViewController: UIViewController {
         let ok = UIAlertAction.init(title: "confirm", style:.default) { (action:UIAlertAction) ->() in
             self.paperwebs[sender.tag-1].title = inputText.text!
             Database().setPaperwebs(paperwebs: self.paperwebs)
-            self.removeAll()
-            self.setPaperwebButtons(paperwebs: self.paperwebs)
+            self.refresh(sender)
         }
         
         let cancel = UIAlertAction.init(title: "cancel", style:.cancel) { (action:UIAlertAction) -> ()in
@@ -204,7 +201,6 @@ class ViewController: UIViewController {
         
         msgAlertCtr.addAction(ok)
         msgAlertCtr.addAction(cancel)
-        
         msgAlertCtr.addTextField { (textField) in
             inputText = textField
         }
@@ -221,19 +217,13 @@ class ViewController: UIViewController {
     @IBAction func search(_ sender: Any) {
         paperwebsSearch = []
         searchText = []
-        
         searchDid = true
         
         for i in 0..<paperwebs.count {
             searchText.append(paperwebs[i].title)
-            
             filterText = searchText.filter({$0.lowercased().contains(searchBar.text!.lowercased())})
-            
-            
-            if(searchBar.text == ""){
-                
+            if searchBar.text == "" {
                 paperwebsSearch.append(paperwebs[i])
-                
             } else {
                 for j in 0..<filterText.count{
                     if (paperwebs[i].title == filterText[j]){
@@ -247,7 +237,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func refresh(_ sender: Any) {
-        viewDidLoad()
+        loadNewPapaerweb()
         paperwebs = Database().getPaperwebs()
         removeAll()
         searchDid = false

@@ -17,7 +17,7 @@
 		1D79B4E0229674F500DD2A3F /* Paperweb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D79B4DF229674F500DD2A3F /* Paperweb.swift */; };
 		1D9AC622229BD642000030E1 /* img in Resources */ = {isa = PBXBuildFile; fileRef = 1D9AC621229BD642000030E1 /* img */; };
 		E35C81AB228FDAFC008A5A6B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35C81AA228FDAFC008A5A6B /* AppDelegate.swift */; };
-		E35C81AD228FDAFC008A5A6B /* DeskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35C81AC228FDAFC008A5A6B /* DeskViewController.swift */; };
+		E35C81AD228FDAFC008A5A6B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35C81AC228FDAFC008A5A6B /* ViewController.swift */; };
 		E35C81B0228FDAFC008A5A6B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E35C81AE228FDAFC008A5A6B /* Main.storyboard */; };
 		E35C81B3228FDAFC008A5A6B /* Paperweb.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E35C81B1228FDAFC008A5A6B /* Paperweb.xcdatamodeld */; };
 		E35C81B5228FDAFE008A5A6B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E35C81B4228FDAFE008A5A6B /* Assets.xcassets */; };
@@ -63,7 +63,7 @@
 		1D9AC621229BD642000030E1 /* img */ = {isa = PBXFileReference; lastKnownFileType = folder; name = img; path = Paperweb/img; sourceTree = "<group>"; };
 		E35C81A7228FDAFC008A5A6B /* Paperweb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Paperweb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E35C81AA228FDAFC008A5A6B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E35C81AC228FDAFC008A5A6B /* DeskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeskViewController.swift; sourceTree = "<group>"; };
+		E35C81AC228FDAFC008A5A6B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E35C81AF228FDAFC008A5A6B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E35C81B2228FDAFC008A5A6B /* Papaerweb.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Papaerweb.xcdatamodel; sourceTree = "<group>"; };
 		E35C81B4228FDAFE008A5A6B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -129,7 +129,7 @@
 				1D79B4D82296746800DD2A3F /* Database.swift */,
 				1D79B4D62296746800DD2A3F /* Keys.swift */,
 				E35C81AA228FDAFC008A5A6B /* AppDelegate.swift */,
-				E35C81AC228FDAFC008A5A6B /* DeskViewController.swift */,
+				E35C81AC228FDAFC008A5A6B /* ViewController.swift */,
 				E35C81AE228FDAFC008A5A6B /* Main.storyboard */,
 				E35C81B4228FDAFE008A5A6B /* Assets.xcassets */,
 				E35C81B6228FDAFE008A5A6B /* LaunchScreen.storyboard */,
@@ -263,7 +263,7 @@
 			files = (
 				1D79B4DB2296746800DD2A3F /* Database.swift in Sources */,
 				1D79B4DA2296746800DD2A3F /* ContentViewController.swift in Sources */,
-				E35C81AD228FDAFC008A5A6B /* DeskViewController.swift in Sources */,
+				E35C81AD228FDAFC008A5A6B /* ViewController.swift in Sources */,
 				1D79B4D92296746800DD2A3F /* Keys.swift in Sources */,
 				E35C81B3228FDAFC008A5A6B /* Paperweb.xcdatamodeld in Sources */,
 				1D79B4E0229674F500DD2A3F /* Paperweb.swift in Sources */,
