@@ -51,9 +51,9 @@ class ViewController: UIViewController {
     }
     
     func loadNewPapaerweb() {//Put all the newly acquired Paperwebs into the database
-        let userDefault = UserDefaults(suiteName: "group.UTS.Paperweb")
+        let userDefault = UserDefaults(suiteName: userDefaultSuiteName().projectName)
         var i = 0
-        var key = "paperweb"+String(i)
+        var key:String
         while(true){
             key = "paperweb"+String(i)
             if((userDefault?.object(forKey: key)) != nil){

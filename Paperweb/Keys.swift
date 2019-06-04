@@ -15,6 +15,10 @@ class userDefaultKeys {
     let paperwebs = "paperwebs"
 }
 
+public class userDefaultSuiteName {
+    let projectName = "group.UTS.Paperweb"
+}
+
 class identifier {
     let showDetailView = "ShowDetailView"
 }

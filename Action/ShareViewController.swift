@@ -40,17 +40,14 @@ extension String {
 
 class ShareViewController: SLComposeServiceViewController {
     
-    //var ttitle: String = ""
     var content: String = ""
     
     override func viewDidLoad() {
         let extensionItem = extensionContext?.inputItems.first as! NSExtensionItem
         let itemProvider = extensionItem.attachments?.first as! NSItemProvider
         let propertyList = String(kUTTypePropertyList)
-        //textView.isHidden = true
-        var reminder = UILabel.init()
+        let reminder = UILabel.init()
         reminder.text = "Edit Title"
-        //let imageView = UIImageView(image: reminder)
         navigationItem.titleView = reminder
         navigationController?.navigationBar.topItem?.titleView = reminder
         navigationController?.navigationBar.topItem?.rightBarButtonItem?.title = "Save"
@@ -61,17 +58,10 @@ class ShareViewController: SLComposeServiceViewController {
                 let results = dictionary[NSExtensionJavaScriptPreprocessingResultsKey] as? NSDictionary
                 print(results!["URL"] as! String)
                 
-                var source = results!["source"] as! String
+                let source = results!["source"] as! String
                 print("???",source,"???")
-                //self.ttitle = source.slice(from: "<title>", to: "</title>") ?? ""
-                //print("???",self.ttitle,"???")
                 self.content = (results!["source"] as! String).html2String
                 print("???",self.content,"???")
-                //                OperationQueue.main.addOperation {
-                //                    if let results = dictionary[NSExtensionJavaScriptPreprocessingResultsKey] as? NSDictionary,
-                //                        let urlString = results["URL"] as? String,
-                //                        let url = NSURL(string: urlString) { print("URL retrieved: \(urlString)") }
-                //                }
             })
         } else {
             print("error")
@@ -87,8 +77,6 @@ class ShareViewController: SLComposeServiceViewController {
         // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
         // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
         let dict = ["title": textView.text ?? "", "content": self.content]
-        //let userDefault = UserDefaults.standard
-        //userDefault.addSuite(named: "group.Paperweb")
         print("user title: ", textView.text ?? "")
         let userDefault = UserDefaults(suiteName: "group.UTS.Paperweb")
         var i = 0
