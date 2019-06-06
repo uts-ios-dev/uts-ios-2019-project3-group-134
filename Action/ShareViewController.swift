@@ -56,12 +56,7 @@ class ShareViewController: SLComposeServiceViewController {
             itemProvider.loadItem(forTypeIdentifier: propertyList, options: nil, completionHandler: { (item, error) -> Void in
                 guard let dictionary = item as? NSDictionary else { return }
                 let results = dictionary[NSExtensionJavaScriptPreprocessingResultsKey] as? NSDictionary
-                print(results!["URL"] as! String)
-
-                let source = results!["source"] as! String
-                print("???", source, "???")
                 self.content = (results!["source"] as! String).html2String
-                print("???", self.content, "???")
             })
         } else {
             print("error")
@@ -90,7 +85,6 @@ class ShareViewController: SLComposeServiceViewController {
             }
         }
         userDefault!.set(dict, forKey: key)
-        print("saved for key:", key)
         userDefault!.synchronize()
         self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
