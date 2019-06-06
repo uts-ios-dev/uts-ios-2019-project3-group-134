@@ -9,12 +9,12 @@
 import Foundation
 
 class Paperweb {
-    var title:String
-    var content:String
-    var index:Int
-    var id:Int
+    var title: String
+    var content: String
+    var index: Int
+    var id: Int
 
-    init(title:String,content:String,index:Int,id:Int) {
+    init(title: String, content: String, index: Int, id: Int) {
         self.title = title
         self.content = content
         self.index = index

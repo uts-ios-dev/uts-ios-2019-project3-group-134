@@ -46,7 +46,7 @@ class ContentViewController: UIViewController {
         } else if bg == 3 {
             paperBackground(self)
         }
-        
+
         textSize = (UserDefaults.standard.value(forKey: "textSize") ?? 2) as! Int
         if textSize == 1 {
             littleFont(self)

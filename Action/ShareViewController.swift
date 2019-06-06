@@ -14,7 +14,7 @@ extension String {
         do {
             return try NSAttributedString(data: Data(utf8),
                                           options: [.documentType: NSAttributedString.DocumentType.html,
-                                                    .characterEncoding: String.Encoding.utf8.rawValue],
+                                                  .characterEncoding: String.Encoding.utf8.rawValue],
                                           documentAttributes: nil)
         } catch {
             print("error: ", error)
@@ -27,9 +27,9 @@ extension String {
 }
 
 extension String {
-    
+
     func slice(from: String, to: String) -> String? {
-        
+
         return (range(of: from)?.upperBound).flatMap { substringFrom in
             (range(of: to, range: substringFrom..<endIndex)?.lowerBound).map { substringTo in
                 String(self[substringFrom..<substringTo])
@@ -39,9 +39,9 @@ extension String {
 }
 
 class ShareViewController: SLComposeServiceViewController {
-    
+
     var content: String = ""
-    
+
     override func viewDidLoad() {
         let extensionItem = extensionContext?.inputItems.first as! NSExtensionItem
         let itemProvider = extensionItem.attachments?.first as! NSItemProvider
@@ -51,28 +51,28 @@ class ShareViewController: SLComposeServiceViewController {
         navigationItem.titleView = reminder
         navigationController?.navigationBar.topItem?.titleView = reminder
         navigationController?.navigationBar.topItem?.rightBarButtonItem?.title = "Save"
-        
+
         if itemProvider.hasItemConformingToTypeIdentifier(propertyList) {
             itemProvider.loadItem(forTypeIdentifier: propertyList, options: nil, completionHandler: { (item, error) -> Void in
                 guard let dictionary = item as? NSDictionary else { return }
                 let results = dictionary[NSExtensionJavaScriptPreprocessingResultsKey] as? NSDictionary
                 print(results!["URL"] as! String)
-                
+
                 let source = results!["source"] as! String
-                print("???",source,"???")
+                print("???", source, "???")
                 self.content = (results!["source"] as! String).html2String
-                print("???",self.content,"???")
+                print("???", self.content, "???")
             })
         } else {
             print("error")
         }
     }
-    
+
     override func isContentValid() -> Bool {
         // Do validation of contentText and/or NSExtensionContext attachments here
         return true
     }
-    
+
     override func didSelectPost() {
         // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
         // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
@@ -80,24 +80,24 @@ class ShareViewController: SLComposeServiceViewController {
         print("user title: ", textView.text ?? "")
         let userDefault = UserDefaults(suiteName: "group.UTS.Paperweb")
         var i = 0
-        var key = "paperweb"+String(i)
-        while(true){
-            key = "paperweb"+String(i)
-            if((userDefault?.object(forKey: key)) != nil){
+        var key = "paperweb" + String(i)
+        while(true) {
+            key = "paperweb" + String(i)
+            if((userDefault?.object(forKey: key)) != nil) {
                 i = i + 1
             } else {
                 break
             }
         }
         userDefault!.set(dict, forKey: key)
-        print("saved for key:",key)
+        print("saved for key:", key)
         userDefault!.synchronize()
         self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
-    
+
     override func configurationItems() -> [Any]! {
         // To add configuration options via table cells at the bottom of the sheet, return an array of SLComposeSheetConfigurationItem here.
         return []
     }
-    
+
 }
